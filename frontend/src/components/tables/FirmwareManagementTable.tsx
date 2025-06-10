@@ -610,7 +610,7 @@ export function FirmwareManagementTable({
                         <Badge variant="secondary">{node.node_type}</Badge>
                       </TableCell>
                       <TableCell className="font-mono text-center">
-                        {node.node_id}
+                        {node.is_group ? `group${node.node_id}` : node.node_id}
                       </TableCell>
                       <TableCell className="max-w-xs">
                         {editingDescription[node.node_codename] ? (
