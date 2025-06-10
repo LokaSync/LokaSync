@@ -48,7 +48,7 @@ class NodeRepository:
         return None
 
     async def add_new_node(self, node_data: NodeCreateSchema) -> Optional[NodeModel]:
-        node_codename = set_codename(node_data.node_location, node_data.node_type, node_data.node_id)
+        node_codename = set_codename(node_data.node_location, node_data.node_type, node_data.node_id, node_data.is_group)
         
         logger.db_info(f"Repository: Adding new node with codename '{node_codename}'")
         
@@ -63,6 +63,7 @@ class NodeRepository:
         doc.update({
             "node_codename": node_codename,
             "description": node_data.description or None,
+            "is_group": node_data.is_group or False,
             "created_at": now,
             "latest_updated": now,
             "firmware_url": None,
