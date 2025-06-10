@@ -15,6 +15,9 @@ export const addNodeSchema = z.object({
     .string()
     .min(3, "Node type is required")
     .max(255, "Node type must be 255 characters or less"),
+  is_group: z
+    .boolean()
+    .catch(false),
 });
 
 export const addFirmwareSchema = z.object({

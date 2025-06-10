@@ -9,6 +9,7 @@ export interface Node {
   description?: string;
   firmware_url: string;
   firmware_version: string;
+  is_group: boolean;
 }
 
 export interface AddNodeRequest {
@@ -16,6 +17,7 @@ export interface AddNodeRequest {
   node_id: string;
   node_location: string;
   node_type: string;
+  is_group: boolean;
 }
 
 export interface AddFirmwareRequest {

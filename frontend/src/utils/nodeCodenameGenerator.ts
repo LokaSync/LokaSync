@@ -1,16 +1,22 @@
 /**
  * Generate node codename from node location, type, and ID
  * Format: location_type_id (all lowercase, spaces replaced with -, separated by _)
+ * If is_group is true, format becomes: location_type_group{id}
  */
 export const generateNodeCodename = (
   location: string,
   type: string,
   id: string,
+  is_group: boolean,
 ): string => {
   const formatString = (str: string) =>
     str.toLowerCase().replace(/\s+/g, "-").trim();
 
-  return `${formatString(location)}_${formatString(type)}_${formatString(id)}`;
+  const formattedId = is_group
+    ? `group${formatString(id)}`
+    : formatString(id);
+
+  return `${formatString(location)}_${formatString(type)}_${formattedId}`;
 };
 
 /**

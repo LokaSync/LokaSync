@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { addNodeSchema, type AddNodeInput } from "@/schemas/nodeSchemas";
@@ -38,8 +39,13 @@ export function AddNodeDialog({
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
+    setValue,
   } = useForm<AddNodeInput>({
-    resolver: zodResolver(addNodeSchema),
+    resolver: zodResolver(addNodeSchema) as any,
+    defaultValues: {
+      is_group: false, // ini penting, biar awalnya tidak `undefined`
+    },
   });
 
   const onSubmit = async (data: AddNodeInput) => {
@@ -151,6 +157,16 @@ export function AddNodeDialog({
             )}
           </div>
 
+          <div className="flex items-center space-x-2 pt-2">
+            <Checkbox
+              id="is_group"
+              checked={!!watch("is_group")}
+              onCheckedChange={value => setValue("is_group", value === true)}
+              disabled={isLoading}
+            />
+            <Label htmlFor="is_group">Group Node</Label>
+          </div>
+
           <div className="flex gap-3 pt-4">
             <Button
               type="button"
@@ -171,3 +187,4 @@ export function AddNodeDialog({
     </Dialog>
   );
 }
+
