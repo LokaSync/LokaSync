@@ -43,15 +43,18 @@ class NodeModel(BaseModel):
         max_length=255,
     )
     firmware_url: Optional[str] = Field(
-        ...,
+        default=None,
         pattern=r'^https?://.*$',
         min_length=15
     )
     firmware_version: Optional[str] = Field(
-        ...,
+        default=None,
         pattern=r'^\d+\.\d+\.\d+$',
         min_length=5,
         max_length=20
+    )
+    is_group: Optional[bool] = Field(
+        default=False
     )
 
     @field_validator("node_location", "node_type", "node_id")

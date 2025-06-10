@@ -104,7 +104,7 @@ def validate_version(value: str) -> str:
     
     return value.strip()
 
-def set_codename(node_location: str, node_type: str, node_id: str) -> str:
+def set_codename(node_location: str, node_type: str, node_id: str, is_group: bool) -> str:
     """
     Generate a unique codename for a node based on its location, type, and ID.
     
@@ -117,4 +117,6 @@ def set_codename(node_location: str, node_type: str, node_id: str) -> str:
     type = node_type.lower().replace(" ", "")
     id = node_id.lower().replace(" ", "")
 
+    if is_group:
+        return f"{location}_{type}_group{id}"
     return f"{location}_{type}_{id}"

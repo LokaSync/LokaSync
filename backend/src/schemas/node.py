@@ -39,6 +39,10 @@ class NodeCreateSchema(BaseModel):
         max_length=10,
         description="Specific node id (e.g., 1a, 1b, 2c, etc.)"
     )
+    is_group: Optional[bool] = Field(
+        default=False,
+        description="Whether this node is a group node"
+    )
     description: Optional[str] = Field(
         default=None,
         max_length=255,
