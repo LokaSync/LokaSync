@@ -13,6 +13,7 @@ from routers.v1.health import router_health
 from routers.v1.node import router_node
 from routers.v1.monitoring import router_monitoring
 from routers.v1.log import router_log
+from routers.v1.locallog import router_locallog
 
 from middlewares.cors import CORSMiddleware
 
@@ -146,5 +147,6 @@ app.include_router(router_health, tags=["Health Check"])
 app.include_router(router_node, prefix=f"{BASE_API_URL}/node", tags=["Node Management"])
 app.include_router(router_monitoring, prefix=f"{BASE_API_URL}/monitoring", tags=["Monitoring Nodes"])
 app.include_router(router_log, prefix=f"{BASE_API_URL}/log", tags=["OTA Update Logs"])
+app.include_router(router_locallog, prefix=f"{BASE_API_URL}/locallog", tags=["Local OTA Update Logs"])
 
 logger.system_info(f"FastAPI application initialized - Swagger Docs: {BASE_API_URL}/docs")
