@@ -217,7 +217,7 @@ def subscribe_local_log_message(
             # Extract required information
             required_fields = [
                 "session_id", "node_mac", 
-                "node_codename", "firmware_version"
+                "node_codename", "firmware_version_origin"
             ]
             
             # Validate required fields
@@ -244,7 +244,7 @@ def subscribe_local_log_message(
                     "upload_duration_app_sec": float(data.get("Upload Time (App)", 0)),
                     "upload_duration_esp_sec": float(data.get("Upload Time (ESP32)", 0)),
                     "latency_sec": float(data.get("Latency", 0)),
-                    "firmware_version_new": data.get("Firmware Version (New", None),
+                    "firmware_version_new": data.get("Firmware Version (New)", None),
                     "bytes_written": int(data.get("Bytes Received", 0)),
                     "download_duration_sec": float(data.get("Download Time", 0)),
                     "download_speed_kbps": float(data.get("Download Speed", 0)),
@@ -273,7 +273,7 @@ def subscribe_local_log_message(
                         session_id=extracted_data["session_id"],
                         node_mac=extracted_data["node_mac"],
                         node_codename=extracted_data["node_codename"],
-                        firmware_version=extracted_data["firmware_version-origin"],
+                        firmware_version_origin=extracted_data["firmware_version_origin"],
                         update_fields=update_fields,
                         log_data=log_data
                     )

@@ -65,7 +65,7 @@ class LocalLogRepository:
                     insert_data.setdefault(field, None)
 
                 # Set alias field if not already
-                insert_data.setdefault("firmware_version-origin", log_data.get("firmware_version-origin", None))
+                insert_data.setdefault("firmware_version_origin", log_data.get("firmware_version_origin", None))
 
                 insert_data.setdefault("flash_status", LocalLogStatus.IN_PROGRESS)
                 insert_data.setdefault("created_at", get_current_datetime())
