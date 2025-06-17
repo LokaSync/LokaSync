@@ -185,7 +185,7 @@ def subscribe_message(
 
     logger.mqtt_info(f"Subscribing to topic: {env.MQTT_SUBSCRIBE_TOPIC_LOG} with QoS {env.MQTT_DEFAULT_QOS}")
     client.subscribe(env.MQTT_SUBSCRIBE_TOPIC_LOG, qos=env.MQTT_DEFAULT_QOS)
-    client.on_message = on_message
+    client.message_callback_add(env.MQTT_SUBSCRIBE_TOPIC_LOG, on_message)
 
 def subscribe_local_log_message(
     client: mqtt.Client | None,
@@ -259,7 +259,7 @@ def subscribe_local_log_message(
             async def upsert_log():
                 try:
                     # Get database dependencies
-                    logs_collection: AsyncIOMotorCollection = await get_logs_collection()
+                    logs_collection: AsyncIOMotorCollection = await get_local_logs_collection()
                     
                     # Create repository and service instances properly
                     log_repository = LocalLogRepository(
@@ -327,4 +327,4 @@ def subscribe_local_log_message(
 
     logger.mqtt_info(f"Subscribing to topic: {env.MQTT_SUBSCRIBE_TOPIC_LOG_LOCAL} with QoS {env.MQTT_DEFAULT_QOS}")
     client.subscribe(env.MQTT_SUBSCRIBE_TOPIC_LOG_LOCAL, qos=env.MQTT_DEFAULT_QOS)
-    client.on_message = on_message
+    client.message_callback_add(env.MQTT_SUBSCRIBE_TOPIC_LOG_LOCAL, on_message)
