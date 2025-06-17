@@ -66,13 +66,7 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-background p-3 sm:p-4 relative overflow-hidden">
       {/* Squares Background Animation */}
       <div className="absolute inset-0 z-0">
-        <Squares
-          speed={0.5}
-          squareSize={15}
-          direction="diagonal"
-          borderColor="#24371f"
-          hoverFillColor="#284e13"
-        />
+        <Squares speed={0.5} squareSize={30} direction="diagonal" />
       </div>
 
       {/* Login Card */}

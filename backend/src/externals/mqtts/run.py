@@ -3,7 +3,7 @@ import asyncio
 import time
 
 from externals.mqtts.client import connect_mqtt_client
-from externals.mqtts.subscribe import subscribe_message
+from externals.mqtts.subscribe import subscribe_message, subscribe_local_log_message
 from utils.logger import logger
 
 _mqtt_client_instance: mqtt.Client | None = connect_mqtt_client()
@@ -23,6 +23,7 @@ def start_mqtt_service(main_loop: asyncio.AbstractEventLoop = None) -> bool:
         
         if _mqtt_client_instance.is_connected():
             subscribe_message(_mqtt_client_instance, main_loop)
+            subscribe_local_log_message(_mqtt_client_instance, main_loop)
             logger.mqtt_info("MQTT service started successfully")
             return True
         

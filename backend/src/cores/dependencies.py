@@ -45,3 +45,10 @@ async def get_logs_collection():
     This function can be used in FastAPI routes to access the log collection.
     """
     return _db.get_collection("logs")
+
+async def get_local_logs_collection():
+    """
+    Dependency to get the local log collection.
+    This function can be used in FastAPI routes to access the log collection.
+    """
+    return _db.get_collection("local_logs")

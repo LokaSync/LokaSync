@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import Main from "@/components/layout/Main";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -22,17 +19,20 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 import {
   Thermometer,
   Droplets,
+  Beaker,
+  Zap,
   Wifi,
   WifiOff,
   RefreshCw,
-  Beaker,
-  Zap,
   Info,
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import Main from "@/components/layout/Main";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useMQTTConnection } from "@/hooks/useMQTTConnection";
 import { mqttManager, type MonitoringMQTTMessage } from "@/utils/mqttClient";
@@ -51,7 +51,9 @@ interface SensorData {
   // Node 1: Temperature & Humidity
   temperature?: number;
   humidity?: number;
-  // Node 2: TDS (Total Dissolved Solids)
+  // Node 2: TDS (Total Dissolved Solids) - PPM format
+  ppm?: number;
+  // Node 2: TDS (Total Dissolved Solids) - lowercase tds format
   tds?: number;
   // Node 3: DS (Dissolved Solids/EC - Electrical Conductivity)
   ds?: number;
@@ -66,6 +68,7 @@ interface NodeData {
   currentValues: {
     temperature?: number;
     humidity?: number;
+    ppm?: number;
     tds?: number;
     ds?: number;
   };
@@ -76,6 +79,8 @@ interface SensorMQTTMessage extends MonitoringMQTTMessage {
   ds?: number;
   ec?: number;
   tds?: number;
+  PPM?: number; // Capital case PPM from ESP
+  ppm?: number; // Lowercase ppm
 }
 
 export default function Monitoring() {
@@ -111,8 +116,16 @@ export default function Monitoring() {
         // Node 1: Temperature & Humidity
         sensorData.temperature = message.temperature as number;
         sensorData.humidity = message.humidity as number;
+      } else if (
+        "temperature" in message &&
+        ("PPM" in message || "ppm" in message)
+      ) {
+        // Node 2: Temperature & TDS (PPM) - ESP format with capital PPM
+        const sensorMessage = message as SensorMQTTMessage;
+        sensorData.temperature = message.temperature as number;
+        sensorData.ppm = (sensorMessage.PPM || sensorMessage.ppm) as number;
       } else if ("tds" in message) {
-        // Node 2: TDS sensor
+        // Node 2: TDS sensor (lowercase format)
         sensorData.tds = message.tds as number;
       } else if ("ds" in message || "ec" in message) {
         // Node 3: DS/EC sensor
@@ -131,6 +144,8 @@ export default function Monitoring() {
         if (typeof data.humidity === "number")
           sensorData.humidity = data.humidity;
         if (typeof data.tds === "number") sensorData.tds = data.tds;
+        if (typeof data.ppm === "number") sensorData.ppm = data.ppm;
+        if (typeof data.PPM === "number") sensorData.ppm = data.PPM; // Handle capital PPM
         if (typeof data.ds === "number") sensorData.ds = data.ds;
         if (typeof data.ec === "number") sensorData.ds = data.ec; // EC and DS are related
       } else {
@@ -249,6 +264,10 @@ export default function Monitoring() {
       label: "Humidity (%)",
       color: "hsl(32, 98%, 50%)", // Orange
     },
+    ppm: {
+      label: "TDS PPM (ppm)",
+      color: "hsl(217, 91%, 60%)", // Blue
+    },
     tds: {
       label: "TDS (ppm)",
       color: "hsl(217, 91%, 60%)", // Blue
@@ -317,54 +336,11 @@ export default function Monitoring() {
     return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
   };
 
-  // Add a timeout mechanism to detect when data stops coming
-  useEffect(() => {
-    const timeoutIds = new Map<string, NodeJS.Timeout>();
-
-    connectedNodes.forEach((node, codename) => {
-      if (node.isReceivingData) {
-        // Clear existing timeout
-        const existingTimeoutId = timeoutIds.get(codename);
-        if (existingTimeoutId) {
-          clearTimeout(existingTimeoutId);
-        }
-
-        // Set new timeout for 30 seconds
-        const timeoutId = setTimeout(() => {
-          setConnectedNodes((prevNodes) => {
-            const updatedNodes = new Map(prevNodes);
-            const currentNode = updatedNodes.get(codename);
-            if (currentNode) {
-              updatedNodes.set(codename, {
-                ...currentNode,
-                isReceivingData: false,
-              });
-            }
-            return updatedNodes;
-          });
-        }, 10000); // 10 seconds timeout
-
-        timeoutIds.set(codename, timeoutId);
-      }
-    });
-
-    // Cleanup function to clear timeouts on unmount
-    return () => {
-      timeoutIds.forEach((timeoutId) => clearTimeout(timeoutId));
-    };
-  }, [connectedNodes]);
-
   return (
-    <div className="min-h-screen flex flex-col bg-background relative">
+    <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Squares Background Animation */}
       <div className="absolute inset-0 z-0">
-        <Squares
-          speed={0.5}
-          squareSize={12}
-          direction="diagonal"
-          borderColor="#24371f"
-          hoverFillColor="#284e13"
-        />
+        <Squares speed={0.5} squareSize={12} direction="diagonal" />
       </div>
 
       {/* Content Layer */}
@@ -373,43 +349,21 @@ export default function Monitoring() {
         <Main>
           <div className="space-y-6">
             {/* Header Section */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold">
-                  Real-time Monitoring
-                </h1>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Monitor IoT sensor data from multiple nodes in real-time via
-                  MQTT
-                </p>
-              </div>
-
-              <div className="flex items-center gap-4">
-                {/* MQTT Connection Status */}
-                <div className="flex items-center gap-2">
-                  {isMQTTConnected ? (
-                    <>
-                      <Wifi className="h-4 w-4 text-green-500" />
-                      <span className="text-sm text-green-500">
-                        MQTT Connected
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <WifiOff className="h-4 w-4 text-red-500" />
-                      <span className="text-sm text-red-500">
-                        MQTT Disconnected
-                      </span>
-                    </>
-                  )}
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 className="text-2xl font-bold">Real-time Monitoring</h1>
+                  <p className="text-muted-foreground">
+                    Monitor IoT sensor data from multiple nodes in real-time via
+                    MQTT
+                  </p>
                 </div>
 
                 {/* Clear History Button */}
                 <Button
                   onClick={clearHistory}
-                  // variant="outline"
-                  size="sm"
                   disabled={!selectedNode}
+                  className="w-fit"
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Clear History
@@ -420,19 +374,40 @@ export default function Monitoring() {
             {/* Node Selection and Parsed Information */}
             <Card className="backdrop-blur-sm bg-card/95 border-border/50 shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Info className="h-5 w-5" />
-                  Node Information
-                </CardTitle>
-                <CardDescription>
-                  Select a node to view its parsed information and sensor data
-                </CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Info className="h-5 w-5" />
+                      Node Information
+                    </CardTitle>
+                    <CardDescription>
+                      Select a node to view its parsed information and sensor
+                      data
+                    </CardDescription>
+                  </div>
+                  {/* MQTT Connection Status */}
+                  <div className="flex items-center gap-2 text-sm">
+                    {isMQTTConnected ? (
+                      <>
+                        <Wifi className="h-4 w-4 text-green-600" />
+                        <span className="text-green-600">MQTT Connected</span>
+                      </>
+                    ) : (
+                      <>
+                        <WifiOff className="h-4 w-4 text-red-500" />
+                        <span className="text-red-500">MQTT Disconnected</span>
+                      </>
+                    )}
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                   {/* Node Selection */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Select Node</label>
+                  <div className="flex flex-col items-center">
+                    <label className="text-sm font-medium mb-2 block w-full text-center">
+                      Select Node
+                    </label>
                     <Select
                       value={selectedNodeCodename}
                       onValueChange={setSelectedNodeCodename}
@@ -458,8 +433,10 @@ export default function Monitoring() {
                   </div>
 
                   {/* Parsed Node Location */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Node Location</label>
+                  <div className="flex flex-col items-center">
+                    <label className="text-sm font-medium mb-2 block w-full text-center">
+                      Node Location
+                    </label>
                     <Select
                       value={selectedNode?.parsedInfo.node_location || ""}
                       disabled
@@ -482,8 +459,10 @@ export default function Monitoring() {
                   </div>
 
                   {/* Parsed Node Type */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Node Type</label>
+                  <div className="flex flex-col items-center">
+                    <label className="text-sm font-medium mb-2 block w-full text-center">
+                      Node Type
+                    </label>
                     <Select
                       value={selectedNode?.parsedInfo.node_type || ""}
                       disabled
@@ -502,8 +481,10 @@ export default function Monitoring() {
                   </div>
 
                   {/* Parsed Node ID */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Node ID</label>
+                  <div className="flex flex-col items-center">
+                    <label className="text-sm font-medium mb-2 block w-full text-center">
+                      Node ID
+                    </label>
                     <Select
                       value={selectedNode?.parsedInfo.node_id || ""}
                       disabled
@@ -524,10 +505,21 @@ export default function Monitoring() {
 
                 {/* Node Information Summary */}
                 <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                  <span>
-                    {connectedNodes.size === 0
-                      ? "No nodes detected yet"
-                      : `${connectedNodes.size} total node${connectedNodes.size > 1 ? "s" : ""} available`}
+                  <span className="flex items-center gap-2">
+                    {connectedNodes.size === 0 ? (
+                      <>
+                        <div className="h-3 w-3 rounded-full bg-red-500" />
+                        <span>No nodes detected yet</span>
+                      </>
+                    ) : (
+                      <>
+                        <div className="h-3 w-3 rounded-full bg-green-500" />
+                        <span>
+                          {connectedNodes.size} total node
+                          {connectedNodes.size > 1 ? "s" : ""} available
+                        </span>
+                      </>
+                    )}
                   </span>
                   {selectedNode && (
                     <>
@@ -611,10 +603,19 @@ export default function Monitoring() {
                                   textColor: "text-foreground",
                                   valueColor: "text-foreground",
                                 };
+                              case "ppm":
+                                return {
+                                  icon: Beaker,
+                                  unit: " ppm",
+                                  iconColor: "text-blue-600",
+                                  bgColor: "bg-muted",
+                                  textColor: "text-foreground",
+                                  valueColor: "text-foreground",
+                                };
                               case "tds":
                                 return {
                                   icon: Beaker,
-                                  unit: "ppm",
+                                  unit: " ppm",
                                   iconColor: "text-blue-600",
                                   bgColor: "bg-muted",
                                   textColor: "text-foreground",
@@ -623,7 +624,7 @@ export default function Monitoring() {
                               case "ds":
                                 return {
                                   icon: Zap,
-                                  unit: "μS/cm",
+                                  unit: " μS/cm",
                                   iconColor: "text-purple-600",
                                   bgColor: "bg-muted",
                                   textColor: "text-foreground",
@@ -657,7 +658,7 @@ export default function Monitoring() {
                                   <span
                                     className={`text-sm font-medium capitalize ${sensorConfig.textColor}`}
                                   >
-                                    {key}
+                                    {key === "ppm" ? "TDS PPM" : key}
                                   </span>
                                 </div>
                               </div>
@@ -711,6 +712,13 @@ export default function Monitoring() {
                                 label: "Humidity",
                                 unit: "%",
                                 color: "text-orange-500",
+                              };
+                            case "ppm":
+                              return {
+                                icon: Beaker,
+                                label: "TDS PPM",
+                                unit: "ppm",
+                                color: "text-blue-600",
                               };
                             case "tds":
                               return {
@@ -781,7 +789,7 @@ export default function Monitoring() {
                                   <YAxis
                                     domain={
                                       sensorType === "humidity"
-                                        ? ["dataMin - 10", "dataMax + 10"]
+                                        ? [0, 100]
                                         : ["dataMin - 5", "dataMax + 5"]
                                     }
                                     className="text-xs"
@@ -804,9 +812,9 @@ export default function Monitoring() {
                                         sensorType as keyof typeof chartConfig
                                       ]?.color,
                                       strokeWidth: 2,
-                                      r: 0,
+                                      r: 3,
                                     }}
-                                    connectNulls={false}
+                                    name={sensorConfig.label}
                                   />
                                 </LineChart>
                               </ChartContainer>
@@ -817,7 +825,7 @@ export default function Monitoring() {
                     </div>
                   )}
 
-                  {/* Combined Chart for all sensors */}
+                  {/* Combined Chart */}
                   {availableSensorTypes.length > 1 && (
                     <Card className="backdrop-blur-sm bg-card/95 border-border/50 shadow-lg">
                       <CardHeader>

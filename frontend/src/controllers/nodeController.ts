@@ -55,7 +55,7 @@ const addResponseInterceptor = (instance: typeof api) => {
     async (error) => {
       if (error.response?.status === 401) {
         // Handle unauthorized access
-        window.location.href = "/auth/login";
+        window.location.href = "/login";
       }
 
       const apiError: ApiError = {

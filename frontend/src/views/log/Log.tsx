@@ -201,13 +201,7 @@ export default function Log() {
     <div className="min-h-screen flex flex-col bg-background relative">
       {/* Squares Background Animation */}
       <div className="absolute inset-0 z-0">
-        <Squares
-          speed={0.5}
-          squareSize={12}
-          direction="diagonal"
-          borderColor="#24371f"
-          hoverFillColor="#284e13"
-        />
+        <Squares speed={0.5} squareSize={12} direction="diagonal" />
       </div>
 
       {/* Content Layer */}
@@ -225,12 +219,7 @@ export default function Log() {
               </div>
 
               <div className="flex gap-2">
-                <Button
-                  onClick={handleRefresh}
-                  // variant="outline"
-                  size="sm"
-                  disabled={loading}
-                >
+                <Button onClick={handleRefresh} disabled={loading}>
                   <RefreshCw
                     className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
                   />

@@ -185,11 +185,11 @@ export function LogManagementTable({
   const getStatusColor = (status: string) => {
     switch (status) {
       case "success":
-        return "text-green-400";
+        return "text-green-600";
       case "failed":
-        return "text-red-400";
+        return "text-red-600";
       case "in progress":
-        return "text-orange-400";
+        return "text-orange-500";
       default:
         return "text-gray-400";
     }
@@ -205,8 +205,8 @@ export function LogManagementTable({
             <div className="flex items-center gap-2 text-sm">
               {mqttConnected ? (
                 <>
-                  <Wifi className="h-4 w-4 text-green-500" />
-                  <span className="text-green-500">MQTT Connected</span>
+                  <Wifi className="h-4 w-4 text-green-600" />
+                  <span className="text-green-600">MQTT Connected</span>
                 </>
               ) : (
                 <>

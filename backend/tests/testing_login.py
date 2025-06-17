@@ -20,11 +20,9 @@ def login_user(email: str, password: str):
     }
     response = requests.post(url, json=payload)
     if response.status_code == 200:
-        return response.json()  # contains idToken, refreshToken, etc
+        return response.json()
     else:
         raise ValueError("Login failed: " + response.json().get("error", {}).get("message", "Unknown error"))
 
-# Testing.
-pprint(
-    login_user(EMAIL, PASSWORD)
-)
+# Print the login response
+pprint(login_user(EMAIL, PASSWORD))

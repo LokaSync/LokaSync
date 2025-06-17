@@ -6,7 +6,7 @@
   <h1>LokaSync Web App</h1>
 
   <p>
-    <img src="https://img.shields.io/badge/Version-1.0.1-green?style=flat-square" alt="lokasync-version" />
+    <img src="https://img.shields.io/badge/Version-1.2.3-green?style=flat-square" alt="lokasync-version" />
     <img src="https://img.shields.io/badge/Deployed%20on-Google%20Cloud%20VM-%234285F4.svg?style=flat-square&logo=google-cloud&logoColor=white" alt="google-cloud" />
   </p>
 
@@ -32,14 +32,14 @@
 
 **What happens if incorrect firmware is uploaded?**
 
-> _It's your fault, not our team_. 🤭
-> Traditionally, a mistake made during firmware flashing, such as setting incorrect configuration values, it **requires a manual re-flash of the ESP device**. This process is time-consuming and prone to error, especially for multiple devices deployed in various locations. So, it's crucial to **double check that firmware versions are verified** before an update is initiated.
+> _It's your fault, not our team_. 🤭 \
+Traditionally, a mistake made during firmware flashing, such as setting incorrect configuration values, it **requires a manual re-flash of the ESP device**. This process is time-consuming and prone to error, especially for multiple devices deployed in various locations. So, it's crucial to **double-check that firmware versions are verified** before an update is initiated.
 
 **Why choose LokaSync?**
 
-> _Because it's blazingly fast and secure_. ⚡
-> LokaSync is built for **efficiency and security**. Firmware data is transmitted securely and with minimal bandwidth usage by leveraging the MQTT(S) protocol. 🚀
-> User authentication is managed by Google through Firebase Authentication, ensuring that sensitive credentials are not handled or stored by our application.
+> _Because it's blazingly fast and secure_. ⚡ \
+LokaSync is built for **efficiency and security**. Firmware data is transmitted securely and with minimal bandwidth usage by leveraging the MQTT(S) protocol. 🚀 \
+User authentication is managed by Google through Firebase Authentication, ensuring that sensitive credentials are not handled or stored by our application.
 
 ## 🖥️ Development Environment
 
@@ -75,39 +75,35 @@ The LokaSync application is containerized using Docker and orchestrated with Doc
 - `mongo:8.0` — Provides the NoSQL database service.
 - `python:3.13.3-alpine` — Runs the FastAPI backend application.
 - `node:22.16.0-alpine` — Builds the static React frontend assets.
-- `nginx:stable-alpine` — Serve web content from React buit files.
-- `jc21/nginx-proxy-manager:latest` — Acts as reverse proxy.
+- `nginx:stable-alpine` — Serve web content from React built files.
 
 ## ✨ Features
 
-| Description                                                                           | Status |
-| ------------------------------------------------------------------------------------- | :----: |
-| Over-the-Air (OTA) firmware updates for single devices (Cloud OTA)                    |   ✅   |
-| Real-time logging of the firmware update process                                      |   ✅   |
-| Log export functionality (PDF or CSV)                                                 |   ✅   |
-| Automatic firmware storage on Google Drive                                            |   ✅   |
-| Modern UI with a default dark theme                                                   |   ✅   |
-| User profile customization                                                            |   ✅   |
-| Easy deployment using `docker-compose.yml` file                                       |   ✅   |
-| **Bonus**: Real-time sensor data monitoring (tested for `humidity` and `temperature`) |   ✅   |
-| **In Progress**: Group OTA updates for multiple nodes                                 |   ⌛   |
-| **In Progress**: Local OTA updates via ESP Access Point mode                          |   ⌛   |
+| Description                                                         | Status |
+| ------------------------------------------------------------------- | :----: |
+| Over-the-Air (OTA) firmware updates for single devices (Cloud OTA)  |   ✅   |
+| Real-time logging of the firmware update process                    |   ✅   |
+| Log export functionality (PDF or CSV)                               |   ✅   |
+| Automatic firmware storage on Google Drive                          |   ✅   |
+| Modern UI with a default dark theme                                 |   ✅   |
+| Switch theme to light/dark mode                                     |   ✅   |
+| User profile customization                                          |   ✅   |
+| Easy deployment using `docker-compose.yml` file                     |   ✅   |
+| Group OTA updates for multiple nodes (One Firmware - Many Nodes)    |   ✅   |
+| Local OTA updates via ESP Access Point mode                         |   ✅   |
+| **Bonus**: Real-time sensor data monitoring                         |   ✅   |
 
 ## ℹ️ Usage
 
-### 🔽 Clone the Repository (Not Published Yet / Private)
+### 🔽 Clone the Repository
 
 ```shell
-git clone https://github.com/LokaSync/LokaSync
-cd LokaSync
+git clone https://github.com/LokaSync/LokaSync.git
+cd LokaSync/
 
-# You can use this repo to clone
+# or use our alternative repository
 git clone https://github.com/ItsarHvr/LokaSync-OTA.git
-# Then, change branch to `web-tmp`.
-git fetch all
-get checkout web-tmp
-# Make sure you're in the branch
-git branch --show-current
+cd LokaSync-OTA/
 ```
 
 ### 🗃️ Setup Google Drive API
@@ -218,7 +214,7 @@ FRONTEND_PORT=3000
 # Frontend will running on port 3000
 ```
 
-> ⚠️ **Important**: Please refer to the `.env.example` fie and ensure all env variables are set correctly before proceeding.
+> ⚠️ **Important**: Please refer to the `.env.example` file and ensure all env variables are set correctly before proceeding.
 
 ## 🚀 Run the App with Docker Compose
 
@@ -232,16 +228,16 @@ sudo docker-compose up -d
 
 ## ▶️ Demo Video
 
-🎥 _Coming Soon_.
+🎥 [LokaSync Demo Video Link](https://drive.google.com/file/d/1ZZ0pPXvmzyBhxxksOVeKyhQj3JgqQbMj/view?usp=drive_link)
 
 ## ⚔️ LokaSync Team
 
-| Name                      | Student ID (NIM) | Roles                               |
-| ------------------------- | ---------------- | ----------------------------------- |
-| Alfarizki Nurachman       | 2207421041       | Back-end Developer                  |
-| Itsar Hevara              | 2207421046       | Team Manager + IoT Developer        |
-| Jonathan Victorian Wijaya | 2207421051       | IoT Developer                       |
-| Wahyu Priambodo           | 2207421048       | Web Pentester + SysAdmin + Front-end Developer |
+| Name                      | Student ID (NIM) | Roles                                            |
+| ------------------------- | ---------------- | ----------------------------------------------   |
+| Alfarizki Nurachman       | 2207421041       | Back-end Developer + Quality Assurance           |
+| Itsar Hevara              | 2207421046       | Team Leader + Android Developer + IoT Developer  |
+| Jonathan Victorian Wijaya | 2207421051       | IoT Developer + Quality Assurance                |
+| Wahyu Priambodo           | 2207421048       | Web Pentester + SysAdmin + Front-end Developer   |
 
 ## 📬 Contact
 

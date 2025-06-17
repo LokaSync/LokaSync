@@ -173,13 +173,7 @@ export default function Dashboard() {
     <div className="min-h-screen flex flex-col bg-background relative">
       {/* Squares Background Animation */}
       <div className="absolute inset-0 z-0">
-        <Squares
-          speed={0.5}
-          squareSize={12}
-          direction="diagonal"
-          borderColor="#24371f"
-          hoverFillColor="#284e13"
-        />
+        <Squares speed={0.5} squareSize={12} direction="diagonal" />
       </div>
 
       {/* Content Layer */}
@@ -306,7 +300,6 @@ export default function Dashboard() {
 
                 <Button
                   onClick={() => setIsAddFirmwareOpen(true)}
-                  // variant="outline"
                   className="w-full sm:w-auto"
                 >
                   <Upload className="h-4 w-4 mr-2" />
@@ -315,8 +308,6 @@ export default function Dashboard() {
 
                 <Button
                   onClick={handleRefresh}
-                  // variant="outline"
-                  size="sm"
                   disabled={nodesLoading || otaStats.loading}
                   className="w-full sm:w-auto"
                 >

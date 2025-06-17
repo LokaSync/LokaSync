@@ -45,6 +45,7 @@ class Environment(BaseSettings):
     MQTT_BROKER_CA_CERT_NAME: str = getenv("MQTT_BROKER_CA_CERT_NAME", "emqxsl-ca.crt")
     MQTT_BROKER_TLS_ENABLED: bool = bool(getenv("MQTT_BROKER_TLS_ENABLED", False).capitalize())
     MQTT_SUBSCRIBE_TOPIC_LOG: str = getenv("MQTT_SUBSCRIBE_TOPIC_LOG", "OTAUpdate")
+    MQTT_SUBSCRIBE_TOPIC_LOG_LOCAL: str = getenv("MQTT_SUBSCRIBE_TOPIC_LOG_LOCAL", "LocalOTAUpdate")
     MQTT_PUBLISH_TOPIC_LOG: str = getenv("MQTT_PUBLISH_TOPIC_LOG", "DisplayLog")
     MQTT_CLIENT_ID: str = getenv("MQTT_CLIENT_ID", f"lokasync_backend_{randint(1000, 9999)}")
     MQTT_DEFAULT_QOS: int = int(getenv("MQTT_DEFAULT_QOS", 1))

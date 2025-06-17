@@ -161,7 +161,7 @@ export function AddNodeDialog({
             <Checkbox
               id="is_group"
               checked={!!watch("is_group")}
-              onCheckedChange={value => setValue("is_group", value === true)}
+              onCheckedChange={(value) => setValue("is_group", value === true)}
               disabled={isLoading}
             />
             <Label htmlFor="is_group">Group Node</Label>
@@ -187,4 +187,3 @@ export function AddNodeDialog({
     </Dialog>
   );
 }
-
