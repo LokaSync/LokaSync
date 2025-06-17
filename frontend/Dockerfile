@@ -5,7 +5,7 @@ FROM node:22.16.0-alpine AS builder
 # Set the maintainer label
 LABEL author="LokaSync team"
 LABEL description="LokaSync frontend service"
-LABEL version="1.0.3"
+LABEL version="1.0.4"
 
 # Set environment variables
 ENV APP_DIR="/lokasync"
@@ -37,7 +37,7 @@ RUN npm i -g npm@latest typescript && npm run build:prod
 
 # Verify the build output (dist folder)
 RUN ls -lah $APP_DIR/dist && \
-  echo "Build completed successfully."
+  echo "Build completed."
 
 # Copy the built files to a specific directory
 RUN mkdir -p /dist && \
@@ -49,17 +49,15 @@ RUN mkdir -p /dist && \
 # Final stage: use Nginx to serve the React built application
 FROM nginx:stable-alpine
 
-# Set working directory to Nginx HTML directory
-WORKDIR /usr/share/nginx/html
-
 # Remove default Nginx static web files
-RUN rm -rf ./*
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy custom configuration file
+# Copy custom configuration file, but backup the default configuration first
+RUN mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.default
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Copy the built files to the Nginx HTML directory
-COPY --from=builder /dist ./
+COPY --from=builder /dist /usr/share/nginx/html/
 
 # Expose the Nginx port
 EXPOSE 3000

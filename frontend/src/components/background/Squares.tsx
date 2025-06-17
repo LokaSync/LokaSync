@@ -1,6 +1,5 @@
-import React, { useRef, useEffect } from "react";
-
-type CanvasStrokeStyle = string | CanvasGradient | CanvasPattern;
+import React, { useRef, useEffect, useCallback } from "react";
+import { useTheme } from "@/components/theme-provider";
 
 interface GridOffset {
   x: number;
@@ -10,18 +9,15 @@ interface GridOffset {
 interface SquaresProps {
   direction?: "diagonal" | "up" | "right" | "down" | "left";
   speed?: number;
-  borderColor?: CanvasStrokeStyle;
   squareSize?: number;
-  hoverFillColor?: CanvasStrokeStyle;
 }
 
 const Squares: React.FC<SquaresProps> = ({
   direction = "right",
   speed = 1,
-  borderColor = "#999",
   squareSize = 40,
-  hoverFillColor = "#222",
 }) => {
+  const { theme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number | null>(null);
   const numSquaresX = useRef<number>(0);
@@ -29,7 +25,29 @@ const Squares: React.FC<SquaresProps> = ({
   const gridOffset = useRef<GridOffset>({ x: 0, y: 0 });
   const hoveredSquareRef = useRef<GridOffset | null>(null);
 
+  // Check if current theme is dark
+  const isDarkTheme = useCallback(() => {
+    return (
+      theme === "dark" ||
+      (theme === "system" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    );
+  }, [theme]);
+
+  // Get theme-based colors using useCallback to prevent recreation on every render
+  const getThemeColors = useCallback(() => {
+    return {
+      borderColor: "#24371f",
+      hoverFillColor: "#284e13",
+    };
+  }, []);
+
   useEffect(() => {
+    // Don't render animation if not in dark theme
+    if (!isDarkTheme()) {
+      return;
+    }
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -41,27 +59,29 @@ const Squares: React.FC<SquaresProps> = ({
       numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
     };
 
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
     const drawGrid = () => {
-      if (!ctx) return;
+      if (!ctx || !canvas) return;
+
+      const { borderColor, hoverFillColor } = getThemeColors();
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const startX = Math.floor(gridOffset.current.x / squareSize) * squareSize;
       const startY = Math.floor(gridOffset.current.y / squareSize) * squareSize;
 
-      for (let x = startX; x < canvas.width + squareSize; x += squareSize) {
-        for (let y = startY; y < canvas.height + squareSize; y += squareSize) {
-          const squareX = x - (gridOffset.current.x % squareSize);
-          const squareY = y - (gridOffset.current.y % squareSize);
+      for (let x = 0; x < numSquaresX.current; x++) {
+        for (let y = 0; y < numSquaresY.current; y++) {
+          const squareX = x * squareSize - (gridOffset.current.x - startX);
+          const squareY = y * squareSize - (gridOffset.current.y - startY);
 
           if (
             hoveredSquareRef.current &&
-            Math.floor((x - startX) / squareSize) ===
-              hoveredSquareRef.current.x &&
-            Math.floor((y - startY) / squareSize) === hoveredSquareRef.current.y
+            Math.floor(
+              (squareX + gridOffset.current.x - startX) / squareSize,
+            ) === hoveredSquareRef.current.x &&
+            Math.floor(
+              (squareY + gridOffset.current.y - startY) / squareSize,
+            ) === hoveredSquareRef.current.y
           ) {
             ctx.fillStyle = hoverFillColor;
             ctx.fillRect(squareX, squareY, squareSize, squareSize);
@@ -148,6 +168,8 @@ const Squares: React.FC<SquaresProps> = ({
       hoveredSquareRef.current = null;
     };
 
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseleave", handleMouseLeave);
     requestRef.current = requestAnimationFrame(updateAnimation);
@@ -158,7 +180,12 @@ const Squares: React.FC<SquaresProps> = ({
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [direction, speed, borderColor, hoverFillColor, squareSize]);
+  }, [direction, speed, squareSize, getThemeColors, isDarkTheme]);
+
+  // Don't render the canvas if not in dark theme
+  if (!isDarkTheme()) {
+    return null;
+  }
 
   return (
     <canvas

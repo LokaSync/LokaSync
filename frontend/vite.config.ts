@@ -15,4 +15,16 @@ export default defineConfig({
     port: 3000,
   },
   base: "/",
+  // Optimization
+  optimizeDeps: {
+    include: [
+      "react",
+      "react-dom",
+      "react-router-dom",
+      "axios",
+      "mqtt",
+      "firebase",
+      "recharts",
+    ],
+  },
 });

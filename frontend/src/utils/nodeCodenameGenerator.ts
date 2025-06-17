@@ -12,9 +12,7 @@ export const generateNodeCodename = (
   const formatString = (str: string) =>
     str.toLowerCase().replace(/\s+/g, "-").trim();
 
-  const formattedId = is_group
-    ? `group${formatString(id)}`
-    : formatString(id);
+  const formattedId = is_group ? `group${formatString(id)}` : formatString(id);
 
   return `${formatString(location)}_${formatString(type)}_${formattedId}`;
 };

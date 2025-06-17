@@ -330,13 +330,7 @@ export default function Profile() {
     <div className="min-h-screen flex flex-col bg-background relative">
       {/* Squares Background Animation */}
       <div className="absolute inset-0 z-0">
-        <Squares
-          speed={0.5}
-          squareSize={12}
-          direction="diagonal"
-          borderColor="#24371f"
-          hoverFillColor="#284e13"
-        />
+        <Squares speed={0.5} squareSize={12} direction="diagonal" />
       </div>
 
       {/* Content Layer */}

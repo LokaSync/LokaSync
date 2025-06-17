@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { auth } from "@/utils/firebase";
 import { Menu, X, ChevronDown } from "lucide-react";
+import { ModeToggle } from "@/components/mode-toggle";
+import { toast } from "@/utils/notifications";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [user] = useAuthState(auth);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -29,8 +32,15 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-    } catch (error) {
+      toast.success("Signed Out Successfully", {
+        description: "You have been logged out of your account.",
+      });
+      navigate("/login", { replace: true });
+    } catch (error: unknown) {
       console.error("Failed to log out", error);
+      toast.error("Error", {
+        description: "Failed to sign out",
+      });
     }
   };
 
@@ -106,6 +116,11 @@ const Header = () => {
             >
               Monitoring
             </Link>
+
+            {/* Theme Toggle */}
+            <div className="ml-2">
+              <ModeToggle />
+            </div>
 
             {/* Profile Menu with Avatar Only */}
             {user && (
@@ -201,6 +216,12 @@ const Header = () => {
             >
               Monitoring
             </Link>
+
+            {/* Theme Toggle for Mobile */}
+            <div className="px-3 py-2 flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Theme</span>
+              <ModeToggle />
+            </div>
 
             {user && (
               <>
