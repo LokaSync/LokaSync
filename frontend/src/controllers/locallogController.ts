@@ -69,7 +69,7 @@ export const locallogController = {
       ),
     );
 
-    const response = await api.get("/log/", { params: cleanParams });
+    const response = await api.get("/locallog/", { params: cleanParams });
     return response.data;
   },
 
@@ -77,7 +77,7 @@ export const locallogController = {
    * Get log detail by session_id
    */
   async getLogDetail(sessionId: string): Promise<ApiResponse<FirmwareLocalLog>> {
-    const response = await api.get(`/log/detail/${sessionId}`);
+    const response = await api.get(`/locallog/detail/${sessionId}`);
     return response.data;
   },
 
@@ -85,7 +85,7 @@ export const locallogController = {
    * Delete log data by session_id
    */
   async deleteLog(sessionId: string): Promise<void> {
-    await api.delete(`/log/delete/${sessionId}`);
+    await api.delete(`/locallog/delete/${sessionId}`);
   },
 
   /**
@@ -94,7 +94,7 @@ export const locallogController = {
   async exportLogs(params: Record<string, string>): Promise<void> {
     try {
       // Send request - let backend handle filename generation
-      const response = await api.get("/log/export", {
+      const response = await api.get("/locallog/export", {
         params: params,
         responseType: "blob", // For binary data
       });
