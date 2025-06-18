@@ -23,7 +23,6 @@ export default defineConfig({
       "react-router-dom",
       "axios",
       "mqtt",
-      "firebase",
       "recharts",
     ],
   },

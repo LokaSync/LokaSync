@@ -58,7 +58,6 @@ interface LocalLogManagementTableProps {
     flash_status: string;
   }) => void;
   onRefresh: () => void;
-  mqttConnected: boolean;
 }
 
 // Skeleton row component
@@ -95,7 +94,6 @@ export function LocalLogManagementTable({
   onPageSizeChange,
   onFilterChange,
   onRefresh,
-  mqttConnected,
 }: LocalLogManagementTableProps) {
   const [selectedLog, setSelectedLog] = useState<FirmwareLocalLog | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<FirmwareLocalLog | null>(null);
@@ -199,17 +197,6 @@ export function LocalLogManagementTable({
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg">Filter Options</CardTitle>
             <div className="flex items-center gap-2 text-sm">
-              {mqttConnected ? (
-                <>
-                  <Wifi className="h-4 w-4 text-green-600" />
-                  <span className="text-green-600">MQTT Connected</span>
-                </>
-              ) : (
-                <>
-                  <WifiOff className="h-4 w-4 text-red-500" />
-                  <span className="text-red-500">MQTT Disconnected</span>
-                </>
-              )}
             </div>
           </div>
         </CardHeader>
