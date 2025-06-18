@@ -144,7 +144,6 @@ export default function LocalLog() {
               onPageSizeChange={handlePageSizeChange}
               onFilterChange={handleFilterChange}
               onRefresh={fetchLogs}
-              mqttConnected={false}
             />
           </div>
         </Main>
