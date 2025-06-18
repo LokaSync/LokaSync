@@ -23,8 +23,6 @@ import {
   Trash2,
   ChevronLeft,
   ChevronRight,
-  Wifi,
-  WifiOff,
   Download,
 } from "lucide-react";
 import type { FirmwareLocalLog, ApiError, LocalLogFilterOptions } from "@/types";
