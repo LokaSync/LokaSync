@@ -12,6 +12,7 @@ import ForgotPassword from "@/views/auth/ForgotPassword";
 import Dashboard from "@/views/dashboard/Dashboard";
 import Monitoring from "@/views/monitoring/Monitoring";
 import Log from "@/views/log/Log";
+import LocalLog from "@/views/locallog/LocalLog";
 import Profile from "@/views/profile/Profile";
 import { Loader2 } from "lucide-react";
 import NotFound from "@/views/error/NotFound";
@@ -93,6 +94,14 @@ export default function AppRoutes() {
           element={
             <ProtectedRoute>
               <Log />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/locallog"
+          element={
+            <ProtectedRoute>
+              <LocalLog />
             </ProtectedRoute>
           }
         />

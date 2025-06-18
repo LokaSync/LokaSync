@@ -15,6 +15,16 @@ export interface PaginatedApiResponse<T> extends ApiResponse<T[]> {
   };
 }
 
+export interface PaginatedLocalLogResponse<T> extends ApiResponse<T[]> {
+  page: number;
+  page_size: number;
+  total_data: number;
+  total_page: number;
+  filter_options: {
+    flash_statuses: string[];
+  };
+}
+
 export interface ApiError {
   message: string;
   status_code: number;
