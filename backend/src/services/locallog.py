@@ -5,7 +5,7 @@ from models.locallog import LocalLogModel
 from schemas.locallog import LocalLogFilterOptions
 from repositories.locallog import LocalLogRepository
 from utils.logger import logger
-from utils.export import create_csv_from_logs, create_pdf_from_logs
+from utils.export_locallog import create_csv_from_local_logs, create_pdf_from_local_logs
 
 
 class LocalLogService:
@@ -134,12 +134,12 @@ class LocalLogService:
         logger.api_info(f"Service: Found {len(logs)} logs to export")
         
         # Import here to avoid circular imports
-        from utils.export import create_csv_from_logs, create_pdf_from_logs
+        from utils.export_locallog import create_csv_from_local_logs, create_pdf_from_local_logs
         
         if export_type == "csv":
-            file_data = create_csv_from_logs(logs)
+            file_data = create_csv_from_local_logs(logs)
         else:
-            file_data = create_pdf_from_logs(logs)
+            file_data = create_pdf_from_local_logs(logs)
         
         logger.api_info(f"Service: Successfully created {export_type.upper()} export")
         
