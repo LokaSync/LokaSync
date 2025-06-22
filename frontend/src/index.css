@@ -160,3 +160,11 @@
     --chart-5: oklch(0.645 0.246 16.439);
   }
 }
+
+/* Mobile toast styling */
+@media (max-width: 640px) {
+  #notification-container > div {
+    margin-bottom: 8px !important;
+    word-break: break-word !important;
+  }
+}

@@ -5,7 +5,7 @@ FROM node:22.16.0-alpine AS builder
 # Set the maintainer label
 LABEL author="LokaSync team"
 LABEL description="LokaSync frontend service"
-LABEL version="1.0.4"
+LABEL version="1.1.5"
 
 # Set environment variables
 ENV APP_DIR="/lokasync"
