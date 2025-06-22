@@ -10,7 +10,11 @@ import { LocalLogManagementTable } from "@/components/tables/LocalLogManagementT
 import { locallogController } from "@/controllers";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Squares from "@/components/background/Squares";
-import type { FirmwareLocalLog, LocalLogsListParams, LocalLogFilterOptions } from "@/types";
+import type {
+  FirmwareLocalLog,
+  LocalLogsListParams,
+  LocalLogFilterOptions,
+} from "@/types";
 
 export default function LocalLog() {
   const [logs, setLogs] = useState<FirmwareLocalLog[]>([]);
@@ -22,7 +26,7 @@ export default function LocalLog() {
     total_data: 0,
     total_page: 0,
   });
-  const [filterOptions, setFilterOptions] = useState<LocalLogFilterOptions>({ 
+  const [filterOptions, setFilterOptions] = useState<LocalLogFilterOptions>({
     flash_statuses: [],
   });
   const [filters, setFilters] = useState({
@@ -111,7 +115,9 @@ export default function LocalLog() {
             {/* Header Section */}
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold">Local Log Updates</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold">
+                  Local Log Updates
+                </h1>
                 <p className="text-sm text-muted-foreground mt-1">
                   View and manage firmware local update logs in real-time
                 </p>

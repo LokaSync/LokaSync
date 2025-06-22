@@ -18,14 +18,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Eye,
-  Trash2,
-  ChevronLeft,
-  ChevronRight,
-  Download,
-} from "lucide-react";
-import type { FirmwareLocalLog, ApiError, LocalLogFilterOptions } from "@/types";
+import { Eye, Trash2, ChevronLeft, ChevronRight, Download } from "lucide-react";
+import type {
+  FirmwareLocalLog,
+  ApiError,
+  LocalLogFilterOptions,
+} from "@/types";
 import { LocalLogDetailDialog } from "@/components/dialogs/LocalLogDetailDialog";
 import { DeleteLocalLogDialog } from "@/components/dialogs/DeleteLocalLogDialog";
 import { ExportLocalLogDialog } from "@/components/dialogs/ExportLocalLogDialog";
@@ -52,9 +50,7 @@ interface LocalLogManagementTableProps {
   };
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
-  onFilterChange: (filters: {
-    flash_status: string;
-  }) => void;
+  onFilterChange: (filters: { flash_status: string }) => void;
   onRefresh: () => void;
 }
 
@@ -94,7 +90,9 @@ export function LocalLogManagementTable({
   onRefresh,
 }: LocalLogManagementTableProps) {
   const [selectedLog, setSelectedLog] = useState<FirmwareLocalLog | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<FirmwareLocalLog | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<FirmwareLocalLog | null>(
+    null,
+  );
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState<Record<string, boolean>>(
     {},
@@ -194,8 +192,7 @@ export function LocalLogManagementTable({
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg">Filter Options</CardTitle>
-            <div className="flex items-center gap-2 text-sm">
-            </div>
+            <div className="flex items-center gap-2 text-sm"></div>
           </div>
         </CardHeader>
         <CardContent>

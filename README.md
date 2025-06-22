@@ -6,7 +6,7 @@
   <h1>LokaSync Web App</h1>
 
   <p>
-    <img src="https://img.shields.io/badge/Version-1.2.3-green?style=flat-square" alt="lokasync-version" />
+    <img src="https://img.shields.io/badge/Version-1.2.4-green?style=flat-square" alt="lokasync-version" />
     <img src="https://img.shields.io/badge/Deployed%20on-Google%20Cloud%20VM-%234285F4.svg?style=flat-square&logo=google-cloud&logoColor=white" alt="google-cloud" />
   </p>
 
@@ -237,7 +237,7 @@ sudo docker-compose up -d
 | Alfarizki Nurachman       | 2207421041       | Back-end Developer + Quality Assurance           |
 | Itsar Hevara              | 2207421046       | Team Leader + Android Developer + IoT Developer  |
 | Jonathan Victorian Wijaya | 2207421051       | IoT Developer + Quality Assurance                |
-| Wahyu Priambodo           | 2207421048       | Web Pentester + SysAdmin + Front-end Developer   |
+| Wahyu Priambodo           | 2207421048       | SysAdmin + Front-end Developer   |
 
 ## 📬 Contact
 

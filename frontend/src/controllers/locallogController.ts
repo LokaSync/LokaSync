@@ -54,7 +54,8 @@ api.interceptors.response.use(
   },
 );
 
-interface PaginatedLogResponse extends PaginatedLocalLogResponse<FirmwareLocalLog> {
+interface PaginatedLogResponse
+  extends PaginatedLocalLogResponse<FirmwareLocalLog> {
   filter_options: LocalLogFilterOptions;
 }
 
@@ -62,7 +63,9 @@ export const locallogController = {
   /**
    * Get all firmware update logs
    */
-  async getAllLogs(params?: LocalLogsListParams): Promise<PaginatedLogResponse> {
+  async getAllLogs(
+    params?: LocalLogsListParams,
+  ): Promise<PaginatedLogResponse> {
     const cleanParams = Object.fromEntries(
       Object.entries(params || {}).filter(
         ([, value]) => value !== undefined && value !== "",
@@ -76,7 +79,9 @@ export const locallogController = {
   /**
    * Get log detail by session_id
    */
-  async getLogDetail(sessionId: string): Promise<ApiResponse<FirmwareLocalLog>> {
+  async getLogDetail(
+    sessionId: string,
+  ): Promise<ApiResponse<FirmwareLocalLog>> {
     const response = await api.get(`/locallog/detail/${sessionId}`);
     return response.data;
   },

@@ -11,20 +11,56 @@ interface NotificationOptions {
 class NotificationManager {
   private container: HTMLDivElement | null = null;
   private notifications: Map<string, HTMLDivElement> = new Map();
+  private resizeListener: (() => void) | null = null;
+  private resizeTimeout: number | null = null;
+
+  constructor() {
+    // Create the resize handler
+    this.resizeListener = this.handleResize.bind(this);
+
+    // Add resize listener when window exists (for SSR compatibility)
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", this.resizeListener);
+    }
+  }
+
+  // Handle window resize events with debouncing
+  private handleResize() {
+    if (this.resizeTimeout) {
+      window.clearTimeout(this.resizeTimeout);
+    }
+
+    this.resizeTimeout = window.setTimeout(() => {
+      this.updateContainerPosition();
+    }, 150); // Debounce for performance
+  }
+
+  // Update container position based on current viewport size
+  private updateContainerPosition() {
+    if (!this.container) return;
+
+    const isMobile = window.innerWidth <= 640;
+
+    this.container.style.top = isMobile ? "10px" : "20px";
+    this.container.style.right = isMobile ? "10px" : "20px";
+    this.container.style.left = isMobile ? "10px" : "auto";
+    this.container.style.maxWidth = isMobile ? "none" : "400px";
+    this.container.style.width = isMobile ? "auto" : "";
+  }
 
   private createContainer() {
     if (!this.container) {
       this.container = document.createElement("div");
       this.container.id = "notification-container";
-      this.container.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 9999;
-        pointer-events: none;
-        max-width: 400px;
-        width: 100%;
-      `;
+
+      // Base container styles (non-responsive)
+      this.container.style.position = "fixed";
+      this.container.style.zIndex = "9999";
+      this.container.style.pointerEvents = "none";
+
+      // Set responsive positioning
+      this.updateContainerPosition();
+
       document.body.appendChild(this.container);
     }
     return this.container;
@@ -69,6 +105,9 @@ class NotificationManager {
     const id = Date.now().toString();
     const typeStyles = this.getTypeStyles(type);
 
+    // Check if mobile viewport
+    const isMobile = window.innerWidth <= 640;
+
     // Create notification element
     const notification = document.createElement("div");
     notification.style.cssText = `
@@ -82,8 +121,8 @@ class NotificationManager {
       transform: translateX(100%);
       transition: all 0.3s ease-in-out;
       opacity: 0;
-      max-width: 100%;
       word-wrap: break-word;
+      ${isMobile ? "width: 100%; max-width: none;" : "max-width: 400px;"}
     `;
 
     notification.innerHTML = `
@@ -104,13 +143,13 @@ class NotificationManager {
           ${typeStyles.icon}
         </div>
         <div style="flex: 1; min-width: 0;">
-          <div style="font-weight: 600; color: #1f2937; margin-bottom: 4px; font-size: 14px;">
+          <div style="font-weight: 600; color: #1f2937; margin-bottom: 4px; font-size: ${isMobile ? "13px" : "14px"};">
             ${title}
           </div>
           ${
             description
               ? `
-            <div style="color: #6b7280; font-size: 13px; line-height: 1.4;">
+            <div style="color: #6b7280; font-size: ${isMobile ? "12px" : "13px"}; line-height: 1.4;">
               ${description}
             </div>
           `
@@ -179,6 +218,27 @@ class NotificationManager {
     }
   }
 
+  // Clean up resources when the app is unmounted
+  destroy() {
+    // Remove resize listener
+    if (typeof window !== "undefined" && this.resizeListener) {
+      window.removeEventListener("resize", this.resizeListener);
+    }
+
+    // Clear timeout if exists
+    if (this.resizeTimeout) {
+      window.clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = null;
+    }
+
+    // Remove container and reset state
+    if (this.container && this.container.parentNode) {
+      this.container.parentNode.removeChild(this.container);
+    }
+    this.container = null;
+    this.notifications.clear();
+  }
+
   success(title: string, description?: string) {
     return this.show({ title, description, type: "success" });
   }
@@ -199,7 +259,7 @@ class NotificationManager {
 // Create global instance
 const notificationManager = new NotificationManager();
 
-// Make it available globally for close button - Fix the TypeScript error here
+// Make it available globally for close button
 declare global {
   interface Window {
     notificationManager: NotificationManager;
@@ -208,6 +268,7 @@ declare global {
 
 window.notificationManager = notificationManager;
 
+// Export the toast object with correct method signatures
 export const toast = {
   success: (title: string, options?: { description?: string }) =>
     notificationManager.success(title, options?.description),
