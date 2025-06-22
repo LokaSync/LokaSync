@@ -381,8 +381,7 @@ export default function Monitoring() {
                       Node Information
                     </CardTitle>
                     <CardDescription>
-                      Select a node to view its parsed information and sensor
-                      data
+                      Select a node to view sensor data
                     </CardDescription>
                   </div>
                   {/* MQTT Connection Status */}
@@ -900,7 +899,7 @@ export default function Monitoring() {
                       <p className="text-muted-foreground">
                         {connectedNodes.size === 0
                           ? isMQTTConnected
-                            ? "MQTT is connected. Waiting for nodes to send sensor data..."
+                            ? "MQTT is connected. Waiting for nodes to send their sensor data..."
                             : "Please check your MQTT connection and ensure nodes are publishing data."
                           : "Please select a node from the dropdown above to view its sensor data."}
                       </p>

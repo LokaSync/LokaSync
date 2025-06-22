@@ -107,9 +107,9 @@ const Header = () => {
               Log Update
             </Link>
             <Link
-              to="/locallog"
+              to="/local-log"
               className={`px-3 py-2 rounded text-sm transition-colors duration-150 ${
-                location.pathname.includes("/locallog")
+                location.pathname.includes("/local-log")
                   ? "text-primary font-medium bg-accent"
                   : "text-muted-foreground hover:text-primary"
               }`}
@@ -215,6 +215,16 @@ const Header = () => {
               }`}
             >
               Log Update
+            </Link>
+            <Link
+              to="/local-log"
+              className={`block px-3 py-2 rounded text-sm ${
+                location.pathname.includes("/local-log")
+                  ? "text-primary font-medium bg-accent"
+                  : "text-muted-foreground"
+              }`}
+            >
+              Local Log Update
             </Link>
             <Link
               to="/monitoring"

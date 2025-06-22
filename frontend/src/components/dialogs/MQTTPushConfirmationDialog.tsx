@@ -1,13 +1,11 @@
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -32,44 +30,65 @@ export function MQTTPushConfirmationDialog({
   firmwareUrl,
   isConnected,
 }: MQTTPushConfirmationDialogProps) {
+  const handleConfirm = () => {
+    onConfirm();
+    onOpenChange(false);
+  };
+
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="max-w-md">
-        <AlertDialogHeader>
-          <AlertDialogTitle className="flex items-center gap-2">
-            <Wifi className="h-5 w-5" />
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="w-[95vw] max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-base">
+            <Wifi className="h-4 w-4" />
             MQTT Firmware Push
-          </AlertDialogTitle>
-          <AlertDialogDescription>
+          </DialogTitle>
+          <DialogDescription className="text-sm">
             You are about to send firmware update command to{" "}
-            <strong>{nodeCodename}</strong>
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+            <strong className="break-all">{nodeCodename}</strong>
+          </DialogDescription>
+        </DialogHeader>
 
         <div className="space-y-4">
           {/* Firmware Details */}
           <div className="space-y-3">
-            <div className="grid grid-cols-3 gap-2 text-sm">
-              <span className="font-medium">Node:</span>
-              <span className="col-span-2 font-mono">{nodeCodename}</span>
+            <div className="space-y-3 text-sm">
+              <div className="flex flex-col gap-1">
+                <span className="font-medium text-xs text-muted-foreground">
+                  Node:
+                </span>
+                <span className="font-mono text-xs break-all bg-muted p-2 rounded">
+                  {nodeCodename}
+                </span>
+              </div>
 
-              <span className="font-medium">Firmware Version:</span>
-              <span className="col-span-2">
-                <Badge variant="outline">{firmwareVersion}</Badge>
-              </span>
+              <div className="flex flex-col gap-1">
+                <span className="font-medium text-xs text-muted-foreground">
+                  Firmware Version:
+                </span>
+                <div>
+                  <Badge variant="outline" className="text-xs">
+                    {firmwareVersion}
+                  </Badge>
+                </div>
+              </div>
 
-              <span className="font-medium">Firmware URL:</span>
-              <span className="col-span-2 text-xs">
-                <a
-                  href={firmwareUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 underline break-all inline-flex items-start gap-1 group"
-                >
-                  <span className="break-all">{firmwareUrl}</span>
-                  <ExternalLink className="h-3 w-3 flex-shrink-0 mt-0.5 opacity-70 group-hover:opacity-100 transition-opacity" />
-                </a>
-              </span>
+              <div className="flex flex-col gap-1">
+                <span className="font-medium text-xs text-muted-foreground">
+                  Firmware URL:
+                </span>
+                <div className="bg-muted p-2 rounded">
+                  <a
+                    href={firmwareUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 underline text-xs break-all inline-flex items-start gap-1 group"
+                  >
+                    <span className="break-all">{firmwareUrl}</span>
+                    <ExternalLink className="h-3 w-3 flex-shrink-0 mt-0.5 opacity-70 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -93,12 +112,17 @@ export function MQTTPushConfirmationDialog({
                 <span className="font-medium min-w-4">2.</span>
                 <span>
                   Verify that constant values like{" "}
-                  <code className="bg-muted px-1 rounded">node_codename</code>,{" "}
-                  <code className="bg-muted px-1 rounded">
+                  <code className="bg-muted px-1 rounded text-xs">
+                    node_codename
+                  </code>
+                  ,{" "}
+                  <code className="bg-muted px-1 rounded text-xs">
                     firmware_version
                   </code>
                   , and{" "}
-                  <code className="bg-muted px-1 rounded">firmware_url</code>{" "}
+                  <code className="bg-muted px-1 rounded text-xs">
+                    firmware_url
+                  </code>{" "}
                   are correct.
                 </span>
               </div>
@@ -112,11 +136,10 @@ export function MQTTPushConfirmationDialog({
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription className="text-xs">
               <strong>Warning:</strong>
-              <p className="inline">
+              <p className="mt-1">
                 If there are errors in your firmware and it has already been
-                published, this is not a program error, but a
-                <strong className="font-semibold inline">
-                  {" "}
+                published, this is not a program error, but a{" "}
+                <strong className="font-semibold">
                   developer (human) error
                 </strong>
                 . You or other team members at the node location must perform
@@ -124,31 +147,27 @@ export function MQTTPushConfirmationDialog({
               </p>
             </AlertDescription>
           </Alert>
-
-          {/* MQTT Connection Status */}
-          {/* <div className="flex items-center gap-2 text-xs">
-            <div
-              className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`}
-            />
-            <span className={isConnected ? "text-green-600" : "text-red-600"}>
-              MQTT {isConnected ? "Connected" : "Disconnected"}
-            </span>
-          </div> */}
         </div>
 
-        <AlertDialogFooter className="gap-2">
-          <AlertDialogCancel onClick={() => onOpenChange(false)}>
+        {/* Footer with buttons */}
+        <div className="flex gap-3 pt-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            className="flex-1"
+          >
             Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={onConfirm}
+          </Button>
+          <Button
+            onClick={handleConfirm}
             disabled={!isConnected}
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-blue-600 hover:bg-blue-700 flex-1"
           >
             Send Firmware Update
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

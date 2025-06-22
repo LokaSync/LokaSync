@@ -129,9 +129,9 @@ export function ExportLocalLogDialog({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="w-[95vw] max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Export Logs</DialogTitle>
+          <DialogTitle>Export Local Logs</DialogTitle>
           <DialogDescription>
-            Download firmware update logs with current filters applied
+            Download firmware update local logs with current filters applied
           </DialogDescription>
         </DialogHeader>
 

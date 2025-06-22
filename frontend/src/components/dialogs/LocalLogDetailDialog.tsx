@@ -67,9 +67,9 @@ export function LocalLogDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="w-[95vw] max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Firmware Local Update Log Details</DialogTitle>
+          <DialogTitle>Update Local Log Details</DialogTitle>
           <DialogDescription>
             Detailed information for firmware local update session
           </DialogDescription>
