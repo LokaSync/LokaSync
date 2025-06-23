@@ -35,7 +35,7 @@ export function NodeDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg sm:max-w-xl lg:max-w-2xl max-h-[85vh] overflow-y-auto">
+      <DialogContent className="w-[95vw] max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Node Details</DialogTitle>
           <DialogDescription>
@@ -52,7 +52,9 @@ export function NodeDetailDialog({
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label className="text-sm font-medium">Node Codename</Label>
-                <p className="font-mono text-sm mt-1">{node.node_codename}</p>
+                <p className="font-mono text-sm mt-1 break-all">
+                  {node.node_codename}
+                </p>
               </div>
               <div>
                 <Label className="text-sm font-medium">Node ID</Label>
@@ -60,7 +62,7 @@ export function NodeDetailDialog({
               </div>
               <div>
                 <Label className="text-sm font-medium">Location</Label>
-                <p className="text-sm mt-1">{node.node_location}</p>
+                <p className="text-sm mt-1 break-words">{node.node_location}</p>
               </div>
               <div>
                 <Label className="text-sm font-medium">Type</Label>
@@ -78,9 +80,9 @@ export function NodeDetailDialog({
             <CardContent className="space-y-3">
               <div>
                 <Label className="text-sm font-medium">Current Version</Label>
-                <span className="font-mono text-sm">
+                <p className="font-mono text-sm mt-1">
                   {node.firmware_version || "N/A"}
-                </span>
+                </p>
               </div>
               <div>
                 <Label className="text-sm font-medium">Firmware URL</Label>
@@ -89,18 +91,18 @@ export function NodeDetailDialog({
                     href={node.firmware_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
+                    className="text-blue-600 hover:underline text-sm break-all block mt-1"
                   >
                     {node.firmware_url}
                   </a>
                 ) : (
-                  <span className="font-mono text-sm">N/A</span>
+                  <p className="font-mono text-sm mt-1">N/A</p>
                 )}
               </div>
               {node.description && (
                 <div>
                   <Label className="text-sm font-medium">Description</Label>
-                  <p className="text-sm mt-1">{node.description}</p>
+                  <p className="text-sm mt-1 break-words">{node.description}</p>
                 </div>
               )}
             </CardContent>

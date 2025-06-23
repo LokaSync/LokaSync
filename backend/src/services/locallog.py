@@ -133,9 +133,12 @@ class LocalLogService:
         
         logger.api_info(f"Service: Found {len(logs)} logs to export")
         
+<<<<<<< HEAD
         # Import here to avoid circular imports
         from utils.export_locallog import create_csv_from_local_logs, create_pdf_from_local_logs
         
+=======
+>>>>>>> 89b069b4bab9267b191b84041a5433ab6aa0bda5
         if export_type == "csv":
             file_data = create_csv_from_local_logs(logs)
         else:

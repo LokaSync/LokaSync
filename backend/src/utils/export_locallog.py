@@ -15,7 +15,11 @@ class PDF(FPDF):
         # Move to the right
         self.cell(80)
         # Title
+<<<<<<< HEAD
         self.cell(30, 10, 'LokaSync OTA - Log Export', 0, 0, 'C')
+=======
+        self.cell(30, 10, 'LokaSync OTA - Local Log Export', 0, 0, 'C')
+>>>>>>> 89b069b4bab9267b191b84041a5433ab6aa0bda5
         # Line break
         self.ln(20)
 

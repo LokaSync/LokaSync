@@ -129,9 +129,9 @@ export function ExportLocalLogDialog({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="w-[95vw] max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Export Logs</DialogTitle>
+          <DialogTitle>Export Local Logs</DialogTitle>
           <DialogDescription>
-            Download firmware update logs with current filters applied
+            Download firmware update local logs with current filters applied
           </DialogDescription>
         </DialogHeader>
 
@@ -160,7 +160,7 @@ export function ExportLocalLogDialog({
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span>❌ Failed:</span>
+                  <span>❎ Failed:</span>
                   <span className="text-red-600 font-medium">
                     {summary.failed}
                   </span>
@@ -246,13 +246,13 @@ export function ExportLocalLogDialog({
             <CardContent className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span>CSV:</span>
-                <span className="font-mono text-xs text-gray-300">
+                <span className="font-mono text-xs text-muted-foreground">
                   📄 {getPreviewFilename("csv")}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>PDF:</span>
-                <span className="font-mono text-xs text-gray-300">
+                <span className="font-mono text-xs text-muted-foreground">
                   📋 {getPreviewFilename("pdf")}
                 </span>
               </div>

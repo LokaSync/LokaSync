@@ -168,7 +168,7 @@ export function ExportLogDialog({
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span>❌ Failed:</span>
+                  <span>❎ Failed:</span>
                   <span className="text-red-600 font-medium">
                     {summary.failed}
                   </span>
@@ -274,13 +274,13 @@ export function ExportLogDialog({
             <CardContent className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span>CSV:</span>
-                <span className="font-mono text-xs text-gray-300">
+                <span className="font-mono text-xs text-muted-foreground">
                   📄 {getPreviewFilename("csv")}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>PDF:</span>
-                <span className="font-mono text-xs text-gray-300">
+                <span className="font-mono text-xs text-muted-foreground">
                   📋 {getPreviewFilename("pdf")}
                 </span>
               </div>

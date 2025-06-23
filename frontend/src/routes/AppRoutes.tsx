@@ -98,7 +98,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/locallog"
+          path="/local-log"
           element={
             <ProtectedRoute>
               <LocalLog />
