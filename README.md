@@ -6,7 +6,7 @@
   <h1>LokaSync Web App</h1>
 
   <p>
-    <img src="https://img.shields.io/badge/Version-1.2.4-green?style=flat-square" alt="lokasync-version" />
+    <img src="https://img.shields.io/badge/Version-1.2.5-green?style=flat-square" alt="lokasync-version" />
     <img src="https://img.shields.io/badge/Deployed%20on-Google%20Cloud%20VM-%234285F4.svg?style=flat-square&logo=google-cloud&logoColor=white" alt="google-cloud" />
   </p>
 
